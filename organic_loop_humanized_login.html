@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Organic Loop — waste pickup log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F6F0E2;
+    --surface: #FFFCF4;
+    --ink: #2B2420;
+    --ink-soft: #6B5D4F;
+    --ink-mute: #9C8E7A;
+    --line: #E6DAC0;
+    --line-strong: #D5C4A0;
+    --green: #3F6B4A;
+    --green-dark: #26402C;
+    --green-tint: #E6EEE2;
+    --amber: #BD5B1E;
+    --amber-tint: #F4E3CD;
+    --teal: #26767A;
+    --teal-tint: #DEEDEA;
+    --slate: #6B5D4F;
+    --slate-tint: #EEE5D2;
+    --danger: #A23B2B;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #211C16;
+      --surface: #2B241C;
+      --ink: #F3EADA;
+      --ink-soft: #C2B39C;
+      --ink-mute: #8C7E68;
+      --line: #3C3325;
+      --line-strong: #4C4130;
+      --green: #83B592;
+      --green-dark: #B7D8BF;
+      --green-tint: #2C3B2E;
+      --amber: #E29A5C;
+      --amber-tint: #3E2C1B;
+      --teal: #7AC4C6;
+      --teal-tint: #1E3436;
+      --slate: #C2B39C;
+      --slate-tint: #322B20;
+      --danger: #E08D7D;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #211C16;
+    --surface: #2B241C;
+    --ink: #F3EADA;
+    --ink-soft: #C2B39C;
+    --ink-mute: #8C7E68;
+    --line: #3C3325;
+    --line-strong: #4C4130;
+    --green: #83B592;
+    --green-dark: #B7D8BF;
+    --green-tint: #2C3B2E;
+    --amber: #E29A5C;
+    --amber-tint: #3E2C1B;
+    --teal: #7AC4C6;
+    --teal-tint: #1E3436;
+    --slate: #C2B39C;
+    --slate-tint: #322B20;
+    --danger: #E08D7D;
+  }
+  html, body {
+    height: 100%;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 28px 20px 64px;
+  }
+  header {
+    margin-bottom: 28px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-mark {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+  }
+  .wordmark {
+    display: flex;
+    flex-direction: column;
+  }
+  h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: 27px;
+    margin: 0;
+    color: var(--green-dark);
+    letter-spacing: -0.01em;
+  }
+  .company-tagline {
+    margin: 1px 0 0;
+    font-size: 13px;
+    color: var(--ink-soft);
+    letter-spacing: 0.01em;
+  }
+  .tagline {
+    margin: 16px 0 0;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    line-height: 1.55;
+    max-width: 46ch;
+  }
+  .hero-art {
+    width: 100%;
+    height: auto;
+    margin-top: 18px;
+    display: block;
+  }
+  .stats {
+    display: flex;
+    gap: 22px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .stat .n {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 21px;
+    font-weight: 600;
+  }
+  .stat .l {
+    font-size: 12.5px;
+    color: var(--ink-mute);
+  }
+
+  section { margin-bottom: 30px; }
+  h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 3px;
+  }
+  .section-hint {
+    font-size: 13px;
+    color: var(--ink-mute);
+    margin: 0 0 14px;
+  }
+
+  form {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .field { margin-bottom: 14px; }
+  .field:last-of-type { margin-bottom: 0; }
+  label {
+    display: block;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin-bottom: 5px;
+  }
+  input, select, textarea {
+    width: 100%;
+    font-family: inherit;
+    font-size: 14.5px;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--line-strong);
+    border-radius: 7px;
+    padding: 9px 11px;
+    outline: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px var(--green-tint);
+  }
+  textarea { resize: vertical; min-height: 54px; }
+  .error-text {
+    color: var(--danger);
+    font-size: 12.5px;
+    margin-top: 5px;
+    display: none;
+  }
+  .field.has-error input,
+  .field.has-error select {
+    border-color: var(--danger);
+  }
+  .field.has-error .error-text { display: block; }
+
+  .sector-picker {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .sector-opt {
+    border: 1px solid var(--line-strong);
+    border-radius: 7px;
+    padding: 8px 6px;
+    text-align: center;
+    font-size: 12.5px;
+    cursor: pointer;
+    background: var(--bg);
+    color: var(--ink-soft);
+    user-select: none;
+  }
+  .sector-opt.sel-juice.active { border-color: var(--amber); background: var(--amber-tint); color: var(--amber); font-weight: 600; }
+  .sector-opt.sel-plastic.active { border-color: var(--teal); background: var(--teal-tint); color: var(--teal); font-weight: 600; }
+  .sector-opt.sel-other.active { border-color: var(--slate); background: var(--slate-tint); color: var(--ink); font-weight: 600; }
+
+  .submit-row {
+    margin-top: 16px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background: var(--green);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 7px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .btn-primary:active { transform: scale(0.98); }
+
+  .queue-groups { display: flex; flex-direction: column; gap: 4px; }
+  .row {
+    display: flex;
+    gap: 12px;
+    padding: 13px 4px;
+    border-bottom: 1px solid var(--line);
+  }
+  .row-strip {
+    width: 4px;
+    border-radius: 0;
+    flex-shrink: 0;
+    align-self: stretch;
+  }
+  .row.juice .row-strip { background: var(--amber); }
+  .row.plastic .row-strip { background: var(--teal); }
+  .row.other .row-strip { background: var(--slate); }
+  .row-body { flex: 1; min-width: 0; }
+  .row-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .row-company {
+    font-weight: 600;
+    font-size: 14.5px;
+  }
+  .row-time {
+    font-size: 12px;
+    color: var(--ink-mute);
+    white-space: nowrap;
+  }
+  .row-meta {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+  .row-meta .sector-tag {
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 1px 7px;
+    border-radius: 20px;
+    margin-right: 6px;
+  }
+  .row.juice .sector-tag { background: var(--amber-tint); color: var(--amber); }
+  .row.plastic .sector-tag { background: var(--teal-tint); color: var(--teal); }
+  .row.other .sector-tag { background: var(--slate-tint); color: var(--ink); }
+  .row-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .btn-ghost {
+    background: none;
+    border: 1px solid var(--line-strong);
+    color: var(--ink-soft);
+    border-radius: 6px;
+    padding: 6px 11px;
+    font-size: 12.5px;
+  }
+  .btn-collect {
+    background: none;
+    border: 1px solid var(--green);
+    color: var(--green);
+    border-radius: 6px;
+    padding: 6px 11px;
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+  .row.collected { opacity: 0.62; }
+  .row.collected .row-company { text-decoration: line-through; text-decoration-color: var(--ink-mute); }
+
+  .collected-toggle {
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    font-size: 13px;
+    padding: 10px 4px;
+    text-align: left;
+    width: 100%;
+  }
+  .collected-toggle span { color: var(--ink); font-weight: 600; }
+
+  .empty {
+    padding: 24px 4px;
+    color: var(--ink-mute);
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 40ch;
+  }
+
+  @media (max-width: 420px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .row-top { flex-direction: column; align-items: flex-start; gap: 2px; }
+  }
+
+  .history-fab {
+    position: fixed;
+    top: calc(16px + env(safe-area-inset-top, 0px));
+    right: 16px;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 20px;
+    padding: 7px 13px 7px 10px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .history-fab svg { width: 15px; height: 15px; display: block; }
+  .history-fab:active { transform: scale(0.97); }
+
+  .history-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 26, 22, 0.45);
+    z-index: 50;
+    display: none;
+    align-items: flex-start;
+    justify-content: flex-end;
+  }
+  .history-overlay.open { display: flex; }
+  .history-panel {
+    background: var(--bg);
+    width: 100%;
+    max-width: 380px;
+    height: 100%;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    display: flex;
+    flex-direction: column;
+    box-shadow: -2px 0 12px rgba(0,0,0,0.12);
+  }
+  .history-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 18px 14px;
+    border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+  .history-head h2 { margin: 0; font-size: 16px; }
+  .history-close {
+    background: none;
+    border: 1px solid var(--line-strong);
+    color: var(--ink-soft);
+    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    font-size: 15px;
+    line-height: 1;
+  }
+  .history-list {
+    overflow-y: auto;
+    padding: 6px 18px 18px;
+    flex: 1;
+  }
+  .history-row {
+    display: flex;
+    gap: 10px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .history-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+  .history-row.evt-logged .history-dot { background: var(--green); }
+  .history-row.evt-collected .history-dot { background: var(--teal); }
+  .history-row.evt-removed .history-dot { background: var(--danger); }
+  .history-event {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    text-transform: capitalize;
+  }
+  .history-company { font-size: 14px; font-weight: 600; margin-top: 1px; }
+  .history-sub { font-size: 12.5px; color: var(--ink-mute); margin-top: 2px; }
+
+  @media (max-width: 420px) {
+    .history-panel { max-width: 100%; }
+    .history-fab span.fab-label { display: none; }
+    .history-fab { padding: 8px; border-radius: 50%; }
+  }
+
+
+  /* Login page */
+  .login-view {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 0;
+  }
+
+  .login-card {
+    width: 100%;
+    max-width: 430px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 8px 30px rgba(43,36,32,0.08);
+  }
+
+  .login-brand {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .login-brand .logo-mark {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 10px;
+  }
+
+  .login-brand h1 {
+    font-size: 30px;
+    margin: 0;
+  }
+
+  .login-brand p {
+    margin: 5px 0 0;
+    color: var(--ink-soft);
+    font-size: 13.5px;
+  }
+
+  .login-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 4px;
+    color: var(--green-dark);
+  }
+
+  .login-subtitle {
+    margin: 0 0 20px;
+    color: var(--ink-mute);
+    font-size: 13px;
+  }
+
+  .login-submit {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .login-error {
+    display: none;
+    margin-top: 10px;
+    color: var(--danger);
+    font-size: 13px;
+    text-align: center;
+  }
+
+  .login-error.show {
+    display: block;
+  }
+
+  .login-demo {
+    margin-top: 16px;
+    padding: 10px 12px;
+    background: var(--green-tint);
+    border-radius: 8px;
+    color: var(--ink-soft);
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .logout-link {
+    background: none;
+    border: none;
+    color: var(--danger);
+    font-size: 13px;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    padding: 0;
+  }
+
+  .hidden { display: none !important; }
+
+  .profile-copy {
+    margin-top: 26px;
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.65;
+    max-width: 54ch;
+  }
+  .profile-copy strong { color: var(--ink); }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 26px;
+  }
+  .step {
+    border-top: 3px solid var(--line-strong);
+    padding-top: 10px;
+  }
+  .step.s-collect { border-top-color: var(--green); }
+  .step.s-convert { border-top-color: var(--amber); }
+  .step.s-care { border-top-color: var(--teal); }
+  .step-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 15.5px;
+    font-weight: 600;
+    margin: 0 0 4px;
+  }
+  .step-text {
+    font-size: 13px;
+    color: var(--ink-mute);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .cta-row {
+    margin-top: 30px;
+  }
+  .btn-large {
+    background: var(--green);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    padding: 13px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Fraunces', Georgia, serif;
+  }
+  .btn-large:active { transform: scale(0.98); }
+
+  .app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+  }
+  .app-brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .app-brand .logo-mark { width: 28px; height: 28px; }
+  .app-brand span {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: 16.5px;
+    color: var(--green-dark);
+  }
+  .back-link {
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    font-size: 13px;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    padding: 0;
+  }
+  .app-stats {
+    display: flex;
+    gap: 22px;
+    margin-bottom: 26px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .thanks-view {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .thanks-card { max-width: 420px; }
+  .thanks-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--green-dark);
+    margin: 0 0 10px;
+  }
+  .thanks-sub {
+    font-size: 16px;
+    color: var(--ink);
+    margin: 0 0 18px;
+    line-height: 1.5;
+  }
+  .thanks-body {
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.7;
+    margin: 0 0 22px;
+  }
+  .thanks-tags {
+    font-size: 14px;
+    color: var(--green);
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+  .thanks-call {
+    font-size: 14px;
+    color: var(--amber);
+    font-weight: 600;
+    margin: 0 0 28px;
+  }
+</style>
+<style>
+/* ===== Humanized Organic Loop theme ===== */
+:root{
+  --human-bg:#f7f3ea;
+  --human-card:#fffdf8;
+  --human-green:#3f6b4b;
+  --human-green-dark:#294a34;
+  --human-leaf:#739b63;
+  --human-cream:#efe6d2;
+  --human-ink:#26342b;
+  --human-muted:#6c766d;
+  --human-line:#ded8ca;
+  --human-shadow:0 14px 35px rgba(53,65,54,.10);
+}
+
+body{
+  background:
+    radial-gradient(circle at 8% 8%, rgba(115,155,99,.10), transparent 24rem),
+    radial-gradient(circle at 92% 18%, rgba(225,185,105,.10), transparent 22rem),
+    var(--human-bg) !important;
+  color:var(--human-ink) !important;
+  font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif !important;
+  letter-spacing:.05px;
+}
+
+h1,h2,h3,.brand,.title{
+  font-family: Georgia, "Times New Roman", serif !important;
+  color:var(--human-green-dark) !important;
+}
+
+button, input, textarea, select{
+  font-family:inherit !important;
+}
+
+button{
+  border-radius:14px !important;
+  transition:transform .18s ease, box-shadow .18s ease, background .18s ease !important;
+}
+
+button:hover{
+  transform:translateY(-1px);
+}
+
+input, textarea, select{
+  border:1px solid var(--human-line) !important;
+  background:#fffefa !important;
+  border-radius:12px !important;
+  color:var(--human-ink) !important;
+  box-shadow:0 2px 7px rgba(60,70,60,.035) !important;
+}
+
+input:focus, textarea:focus, select:focus{
+  outline:none !important;
+  border-color:var(--human-leaf) !important;
+  box-shadow:0 0 0 4px rgba(115,155,99,.13) !important;
+}
+
+.card, .panel, .box, .login-card{
+  background:rgba(255,253,248,.94) !important;
+  border:1px solid rgba(222,216,202,.9) !important;
+  box-shadow:var(--human-shadow) !important;
+  border-radius:22px !important;
+}
+
+.login-view{
+  min-height:100vh !important;
+  background:
+    linear-gradient(135deg, rgba(63,107,75,.06), rgba(239,230,210,.30)),
+    var(--human-bg) !important;
+  padding:28px 18px !important;
+}
+
+.login-card{
+  max-width:430px !important;
+  padding:34px !important;
+  position:relative;
+  overflow:hidden;
+}
+
+.login-card::before{
+  content:"";
+  position:absolute;
+  width:150px;
+  height:150px;
+  border-radius:50%;
+  background:rgba(115,155,99,.10);
+  right:-65px;
+  top:-65px;
+}
+
+.login-brand{
+  font-size:1.05rem !important;
+  letter-spacing:.2px !important;
+  color:var(--human-green) !important;
+}
+
+.login-title{
+  font-size:2.25rem !important;
+  line-height:1.05 !important;
+  margin-bottom:8px !important;
+}
+
+.login-subtitle{
+  color:var(--human-muted) !important;
+  line-height:1.6 !important;
+}
+
+.login-submit{
+  background:var(--human-green) !important;
+  color:white !important;
+  border:0 !important;
+  padding:13px 18px !important;
+  box-shadow:0 8px 18px rgba(63,107,75,.18) !important;
+}
+
+.login-submit:hover{
+  background:var(--human-green-dark) !important;
+  box-shadow:0 11px 23px rgba(63,107,75,.23) !important;
+}
+
+.login-demo{
+  color:#7b7b70 !important;
+  background:#f4efe3 !important;
+  border-radius:12px !important;
+  padding:10px 12px !important;
+}
+
+.login-error{
+  color:#a64b3c !important;
+  background:#fff0ec !important;
+  border-radius:10px !important;
+  padding:8px 10px !important;
+}
+
+.hero, .hero-section{
+  border-radius:26px !important;
+}
+
+nav, header{
+  backdrop-filter:blur(10px);
+}
+
+table{
+  border-radius:14px !important;
+  overflow:hidden;
+}
+
+.badge, .tag, .pill{
+  border-radius:999px !important;
+}
+
+section{
+  scroll-margin-top:20px;
+}
+
+@media (max-width:600px){
+  .login-card{padding:26px 20px !important;}
+  .login-title{font-size:1.9rem !important;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+
+  <!-- Login page - displayed first -->
+  <div id="view-login" class="view">
+    <div class="login-view">
+      <div class="login-card">
+        <div class="login-brand">
+          <svg class="logo-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Organic Loop logo">
+            <path d="M32 8 A24 24 0 0 1 53.8 21" fill="none" style="stroke:var(--green)" stroke-width="7" stroke-linecap="round"/>
+            <path d="M53.8 43 A24 24 0 0 1 32 56" fill="none" style="stroke:var(--amber)" stroke-width="7" stroke-linecap="round"/>
+            <path d="M10.2 21 A24 24 0 0 1 10.2 43" fill="none" style="stroke:var(--teal)" stroke-width="7" stroke-linecap="round"/>
+          </svg>
+          <h1>Organic Loop</h1>
+          <p>Collect. Convert. Care for Earth.</p>
+        </div>
+
+        <h2 class="login-title">Welcome Back</h2>
+        <p class="login-subtitle">Login to manage your waste pickup requests.</p>
+
+        <form id="login-form" novalidate>
+          <div class="field" id="f-login-username">
+            <label for="login-username">Username / Email</label>
+            <input id="login-username" type="text" placeholder="Enter your username or email" autocomplete="username">
+            <div class="error-text">Enter your username or email.</div>
+          </div>
+
+          <div class="field" id="f-login-password">
+            <label for="login-password">Password</label>
+            <input id="login-password" type="password" placeholder="Enter your password" autocomplete="current-password">
+            <div class="error-text">Enter your password.</div>
+          </div>
+
+          <button type="submit" class="btn-primary login-submit">Login</button>
+          <div id="login-error" class="login-error">Please enter valid login details.</div>
+        </form>
+
+        <div class="login-demo">
+          Demo login: enter any username/email, 10-digit phone number and password.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="view-profile" class="view hidden">
+    <header>
+      <div class="brand">
+        <svg class="logo-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Organic Loop logo">
+          <title>Organic Loop</title>
+          <path d="M32 8 A24 24 0 0 1 53.8 21" fill="none" style="stroke:var(--green)" stroke-width="7" stroke-linecap="round"/>
+          <path d="M53.8 43 A24 24 0 0 1 32 56" fill="none" style="stroke:var(--amber)" stroke-width="7" stroke-linecap="round"/>
+          <path d="M10.2 21 A24 24 0 0 1 10.2 43" fill="none" style="stroke:var(--teal)" stroke-width="7" stroke-linecap="round"/>
+        </svg>
+        <div class="wordmark">
+          <h1>Organic Loop</h1>
+          <p class="company-tagline">Collect. Convert. Care for Earth.</p>
+        </div>
+      </div>
+      <p class="tagline">A running log for waste pickup requests. Companies log what they have — you work the queue and mark it collected once you've been.</p>
+
+      <svg class="hero-art" viewBox="0 0 600 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of leaves, a collection bin and a loop arrow">
+        <title>Collect, convert, care</title>
+        <path d="M0 108 C 90 96, 150 100, 240 106 S 420 118, 600 100 L 600 130 L 0 130 Z" style="fill:var(--green-tint)"/>
+        <g transform="translate(46,46)">
+          <path d="M0 34 C -6 12, 14 -6, 36 0 C 30 22, 14 34, 0 34 Z" style="fill:var(--green)"/>
+          <path d="M0 34 C 4 20, 14 8, 30 3" style="stroke:var(--green-dark)" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        </g>
+        <g transform="translate(88,60)">
+          <path d="M0 26 C -5 9, 10 -5, 27 0 C 22 17, 10 26, 0 26 Z" style="fill:var(--amber)"/>
+          <path d="M0 26 C 3 15, 10 6, 22 2" style="stroke:var(--amber)" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.5"/>
+        </g>
+        <g transform="translate(230,28)">
+          <rect x="0" y="26" width="46" height="52" rx="4" style="fill:var(--teal-tint);stroke:var(--teal)" stroke-width="2.4"/>
+          <path d="M-4 26 L50 26 L44 14 L2 14 Z" style="fill:var(--teal)"/>
+          <rect x="16" y="4" width="14" height="10" rx="2" style="fill:var(--teal)"/>
+          <line x1="12" y1="38" x2="12" y2="66" style="stroke:var(--teal)" stroke-width="2.4" stroke-linecap="round"/>
+          <line x1="23" y1="38" x2="23" y2="66" style="stroke:var(--teal)" stroke-width="2.4" stroke-linecap="round"/>
+          <line x1="34" y1="38" x2="34" y2="66" style="stroke:var(--teal)" stroke-width="2.4" stroke-linecap="round"/>
+        </g>
+        <g transform="translate(320,50) scale(0.95)">
+          <path d="M30 2 A28 28 0 1 1 4 20" fill="none" style="stroke:var(--green)" stroke-width="6" stroke-linecap="round"/>
+          <path d="M4 20 L -3 8 M4 20 L 16 16" fill="none" style="stroke:var(--green)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 46 A28 28 0 0 0 28 66" fill="none" style="stroke:var(--amber)" stroke-width="6" stroke-linecap="round"/>
+          <path d="M28 66 L 36 58 M28 66 L 16 62" fill="none" style="stroke:var(--amber)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <g transform="translate(420,20)">
+          <rect x="0" y="22" width="70" height="50" rx="5" style="fill:var(--surface);stroke:var(--line-strong)" stroke-width="2"/>
+          <rect x="0" y="22" width="70" height="14" rx="5" style="fill:var(--green)"/>
+          <circle cx="16" cy="80" r="7" style="fill:var(--ink-soft)"/>
+          <circle cx="54" cy="80" r="7" style="fill:var(--ink-soft)"/>
+          <rect x="70" y="38" width="26" height="26" rx="3" style="fill:var(--green-tint);stroke:var(--green)" stroke-width="2"/>
+        </g>
+        <g transform="translate(520,44)">
+          <path d="M0 30 C -5 11, 12 -5, 32 1 C 27 20, 12 30, 0 30 Z" style="fill:var(--slate)"/>
+        </g>
+      </svg>
+    </header>
+
+    <p class="profile-copy">
+      <strong>Organic Loop</strong> works with juice, beverage and plastic-packaging companies to keep their daily waste out of landfill.
+      Instead of waste sitting around until someone remembers to deal with it, a company logs what they have here, and it goes straight
+      into a pickup queue — so every load gets collected, sorted, and sent on to be reused or recycled.
+    </p>
+
+    <div class="steps">
+      <div class="step s-collect">
+        <p class="step-title">Collect</p>
+        <p class="step-text">Companies log their daily juice, organic, plastic or other waste as it builds up.</p>
+      </div>
+      <div class="step s-convert">
+        <p class="step-title">Convert</p>
+        <p class="step-text">Each request is picked up and routed toward reuse or recycling instead of a landfill.</p>
+      </div>
+      <div class="step s-care">
+        <p class="step-title">Care for Earth</p>
+        <p class="step-text">Less daily waste going untracked means less of it ending up where it shouldn't.</p>
+      </div>
+    </div>
+
+    <div class="cta-row">
+      <button type="button" class="btn-large" id="enter-app">Open the pickup log</button>
+    </div>
+  </div>
+
+  <div id="view-app" class="view hidden">
+    <div class="app-header">
+      <div class="app-brand">
+        <svg class="logo-mark" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Organic Loop logo">
+          <path d="M32 8 A24 24 0 0 1 53.8 21" fill="none" style="stroke:var(--green)" stroke-width="7" stroke-linecap="round"/>
+          <path d="M53.8 43 A24 24 0 0 1 32 56" fill="none" style="stroke:var(--amber)" stroke-width="7" stroke-linecap="round"/>
+          <path d="M10.2 21 A24 24 0 0 1 10.2 43" fill="none" style="stroke:var(--teal)" stroke-width="7" stroke-linecap="round"/>
+        </svg>
+        <span>Organic Loop</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button type="button" class="back-link" id="back-to-profile">← Company profile</button>
+        <button type="button" class="logout-link" id="logout-btn">Logout</button>
+      </div>
+    </div>
+
+    <div class="app-stats">
+      <div class="stat"><span class="n" id="stat-pending">0</span><span class="l">waiting for pickup</span></div>
+      <div class="stat"><span class="n" id="stat-collected">0</span><span class="l">collected</span></div>
+    </div>
+
+  <section>
+    <h2>Log a pickup request</h2>
+    <p class="section-hint">For the company logging their waste.</p>
+    <form id="request-form" novalidate>
+      <div class="grid-2">
+        <div class="field" id="f-company">
+          <label for="company">Company name</label>
+          <input id="company" name="company" type="text" placeholder="Sunrise Juice Pvt. Ltd.">
+          <div class="error-text">Enter a company name.</div>
+        </div>
+        <div class="field" id="f-contact">
+          <label for="contact">Contact person</label>
+          <input id="contact" name="contact" type="text" placeholder="Name">
+          <div class="error-text">Enter a contact name.</div>
+        </div>
+      </div>
+
+      <div class="field" id="f-sector">
+        <label>Waste type</label>
+        <div class="sector-picker" id="sector-picker">
+          <div class="sector-opt sel-juice" data-sector="juice">Juice / organic</div>
+          <div class="sector-opt sel-plastic" data-sector="plastic">Plastic</div>
+          <div class="sector-opt sel-other" data-sector="other">Other</div>
+        </div>
+        <div class="error-text">Choose a waste type.</div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field" id="f-qty">
+          <label for="qty">Estimated quantity</label>
+          <input id="qty" name="qty" type="text" placeholder="e.g. 40 kg, 12 bins">
+          <div class="error-text">Enter an estimated quantity.</div>
+        </div>
+        <div class="field" id="f-phone">
+          <label for="phone">Phone</label>
+          <input id="phone" name="phone" type="tel" placeholder="10-digit number">
+          <div class="error-text">Enter a phone number.</div>
+        </div>
+      </div>
+
+      <div class="field" id="f-address">
+        <label for="address">Pickup address</label>
+        <textarea id="address" name="address" placeholder="Unit, street, area, city"></textarea>
+        <div class="error-text">Enter a pickup address.</div>
+      </div>
+
+      <div class="field">
+        <label for="notes">Notes (optional)</label>
+        <input id="notes" name="notes" type="text" placeholder="Best time to visit, gate code, etc.">
+      </div>
+
+      <div class="submit-row">
+        <button type="submit" class="btn-primary">Add to queue</button>
+      </div>
+    </form>
+  </section>
+
+  <section>
+    <h2>Pickup queue</h2>
+    <p class="section-hint">For you — the collector.</p>
+    <div id="queue-root"></div>
+  </section>
+
+  </div>
+
+  <div id="view-thanks" class="view hidden">
+    <div class="thanks-view">
+      <div class="thanks-card">
+        <p class="thanks-title">🌱 Thank You!</p>
+        <p class="thanks-sub">Together for a Cleaner &amp; Greener Tomorrow. ♻️</p>
+        <p class="thanks-body">Thank you for choosing us.<br>Let's turn waste into a better future.</p>
+        <p class="thanks-tags">♻️ Reduce • Reuse • Recycle</p>
+        <p class="thanks-call">🌿 Be a part of the change!</p>
+        <button type="button" class="btn-large" id="thanks-continue">Back to pickup queue</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<button class="history-fab hidden" id="history-open" type="button" aria-haspopup="dialog" aria-expanded="false">
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="12" cy="12" r="8.5" style="stroke:var(--ink-soft)" stroke-width="1.6"/>
+    <path d="M12 7.5V12L15 14" style="stroke:var(--ink-soft)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <span class="fab-label">History</span>
+</button>
+
+<div class="history-overlay" id="history-overlay" role="dialog" aria-modal="true" aria-label="Full history">
+  <div class="history-panel">
+    <div class="history-head">
+      <h2>History</h2>
+      <button class="history-close" id="history-close" type="button" aria-label="Close history">×</button>
+    </div>
+    <div class="history-list" id="history-list"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var viewLogin = document.getElementById('view-login');
+  var viewProfile = document.getElementById('view-profile');
+  var viewApp = document.getElementById('view-app');
+  var loginForm = document.getElementById('login-form');
+  var logoutBtn = document.getElementById('logout-btn');
+  var loginError = document.getElementById('login-error');
+  var viewThanks = document.getElementById('view-thanks');
+  var enterAppBtn = document.getElementById('enter-app');
+  var backToProfileBtn = document.getElementById('back-to-profile');
+  var thanksContinueBtn = document.getElementById('thanks-continue');
+  var historyFabEl = document.getElementById('history-open');
+
+  function showLogin() {
+    viewLogin.classList.remove('hidden');
+    viewProfile.classList.add('hidden');
+    viewApp.classList.add('hidden');
+    viewThanks.classList.add('hidden');
+    historyFabEl.classList.add('hidden');
+    window.scrollTo(0, 0);
+  }
+
+  function showApp() {
+    viewLogin.classList.add('hidden');
+    viewProfile.classList.add('hidden');
+    viewThanks.classList.add('hidden');
+    viewApp.classList.remove('hidden');
+    historyFabEl.classList.remove('hidden');
+    window.scrollTo(0, 0);
+  }
+  function showProfile() {
+    viewLogin.classList.add('hidden');
+    viewApp.classList.add('hidden');
+    viewThanks.classList.add('hidden');
+    viewProfile.classList.remove('hidden');
+    historyFabEl.classList.add('hidden');
+    window.scrollTo(0, 0);
+  }
+  function showThanks() {
+    viewLogin.classList.add('hidden');
+    viewApp.classList.add('hidden');
+    viewThanks.classList.remove('hidden');
+    historyFabEl.classList.add('hidden');
+    window.scrollTo(0, 0);
+  }
+  enterAppBtn.addEventListener('click', showApp);
+  backToProfileBtn.addEventListener('click', showProfile);
+  thanksContinueBtn.addEventListener('click', showApp);
+
+  loginForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    var username = document.getElementById('login-username').value.trim();
+    var password = document.getElementById('login-password').value.trim();
+
+    document.getElementById('f-login-username').classList.toggle('has-error', !username);
+    document.getElementById('f-login-password').classList.toggle('has-error', !password);
+
+    if (!username || !password) {
+      loginError.classList.add('show');
+      return;
+    }
+
+    loginError.classList.remove('show');
+    loginForm.reset();
+    showProfile();
+  });
+
+  logoutBtn.addEventListener('click', showLogin);
+
+  var STORAGE_KEY = 'reclaim_requests_v1';
+  var HISTORY_KEY = 'reclaim_history_v1';
+  var form = document.getElementById('request-form');
+  var queueRoot = document.getElementById('queue-root');
+  var statPending = document.getElementById('stat-pending');
+  var statCollected = document.getElementById('stat-collected');
+  var sectorPicker = document.getElementById('sector-picker');
+  var selectedSector = null;
+  var showCollected = false;
+
+  var historyFab = document.getElementById('history-open');
+  var historyOverlay = document.getElementById('history-overlay');
+  var historyCloseBtn = document.getElementById('history-close');
+  var historyList = document.getElementById('history-list');
+
+  var EVENT_LABEL = { logged: 'Logged', collected: 'Collected', removed: 'Removed from log' };
+
+  var SECTOR_LABEL = { juice: 'Juice / organic', plastic: 'Plastic', other: 'Other' };
+
+  function loadRequests() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveRequests(list) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    } catch (e) {
+      /* storage unavailable; app still works for this session */
+    }
+  }
+
+  function loadHistory() {
+    try {
+      var raw = localStorage.getItem(HISTORY_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveHistory(list) {
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
+    } catch (e) {
+      /* storage unavailable; history just won't persist across visits */
+    }
+  }
+
+  var requests = loadRequests();
+  var history = loadHistory();
+
+  function logHistory(event, r) {
+    history.unshift({
+      id: 'h' + Date.now() + Math.random().toString(36).slice(2, 7),
+      event: event,
+      company: r.company,
+      sector: r.sector,
+      qty: r.qty,
+      at: Date.now()
+    });
+    saveHistory(history);
+  }
+
+  sectorPicker.addEventListener('click', function (e) {
+    var opt = e.target.closest('.sector-opt');
+    if (!opt) return;
+    selectedSector = opt.getAttribute('data-sector');
+    Array.prototype.forEach.call(sectorPicker.querySelectorAll('.sector-opt'), function (el) {
+      el.classList.toggle('active', el === opt);
+    });
+    clearFieldError('f-sector');
+  });
+
+  function setFieldError(fieldId, show) {
+    var el = document.getElementById(fieldId);
+    if (!el) return;
+    el.classList.toggle('has-error', !!show);
+  }
+  function clearFieldError(fieldId) { setFieldError(fieldId, false); }
+
+  function timeAgo(ts) {
+    var diffMs = Date.now() - ts;
+    var mins = Math.round(diffMs / 60000);
+    if (mins < 1) return 'just now';
+    if (mins < 60) return mins + (mins === 1 ? ' min ago' : ' mins ago');
+    var hrs = Math.round(mins / 60);
+    if (hrs < 24) return hrs + (hrs === 1 ? ' hour ago' : ' hours ago');
+    var days = Math.round(hrs / 24);
+    return days + (days === 1 ? ' day ago' : ' days ago');
+  }
+
+  function render() {
+    var pending = requests.filter(function (r) { return r.status === 'pending'; });
+    var collected = requests.filter(function (r) { return r.status === 'collected'; });
+
+    statPending.textContent = pending.length;
+    statCollected.textContent = collected.length;
+
+    pending.sort(function (a, b) { return a.createdAt - b.createdAt; });
+    collected.sort(function (a, b) { return b.collectedAt - a.collectedAt; });
+
+    var html = '';
+
+    if (requests.length === 0) {
+      html += '<p class="empty">No pickup requests yet. Once a company logs their waste above, it shows up here for you to work through.</p>';
+    } else {
+      if (pending.length === 0) {
+        html += '<p class="empty">Queue is clear. Nothing waiting for pickup right now.</p>';
+      } else {
+        pending.forEach(function (r) { html += rowHtml(r); });
+      }
+
+      if (collected.length > 0) {
+        html += '<button class="collected-toggle" id="toggle-collected">' +
+          (showCollected ? 'Hide' : 'Show') + ' collected — <span>' + collected.length + '</span></button>';
+        if (showCollected) {
+          collected.forEach(function (r) { html += rowHtml(r); });
+        }
+      }
+    }
+
+    queueRoot.innerHTML = html;
+
+    var toggleBtn = document.getElementById('toggle-collected');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', function () {
+        showCollected = !showCollected;
+        render();
+      });
+    }
+
+    Array.prototype.forEach.call(queueRoot.querySelectorAll('[data-collect-id]'), function (btn) {
+      btn.addEventListener('click', function () {
+        markCollected(btn.getAttribute('data-collect-id'));
+      });
+    });
+    Array.prototype.forEach.call(queueRoot.querySelectorAll('[data-remove-id]'), function (btn) {
+      btn.addEventListener('click', function () {
+        removeRequest(btn.getAttribute('data-remove-id'));
+      });
+    });
+  }
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = str == null ? '' : str;
+    return div.innerHTML;
+  }
+
+  function rowHtml(r) {
+    var isCollected = r.status === 'collected';
+    var timeLabel = isCollected
+      ? 'Collected ' + timeAgo(r.collectedAt)
+      : 'Logged ' + timeAgo(r.createdAt);
+    var actions = isCollected
+      ? '<div class="row-actions"><button class="btn-ghost" data-remove-id="' + r.id + '">Remove from log</button></div>'
+      : '<div class="row-actions"><button class="btn-collect" data-collect-id="' + r.id + '">Mark collected</button>' +
+        '<button class="btn-ghost" data-remove-id="' + r.id + '">Remove</button></div>';
+
+    return '' +
+      '<div class="row ' + r.sector + (isCollected ? ' collected' : '') + '">' +
+        '<div class="row-strip"></div>' +
+        '<div class="row-body">' +
+          '<div class="row-top">' +
+            '<span class="row-company">' + escapeHtml(r.company) + '</span>' +
+            '<span class="row-time">' + timeLabel + '</span>' +
+          '</div>' +
+          '<div class="row-meta">' +
+            '<span class="sector-tag">' + SECTOR_LABEL[r.sector] + '</span>' +
+            escapeHtml(r.qty) +
+          '</div>' +
+          '<div class="row-meta">' + escapeHtml(r.address) + '</div>' +
+          '<div class="row-meta">' + escapeHtml(r.contact) + (r.phone ? ' · ' + escapeHtml(r.phone) : '') + '</div>' +
+          (r.notes ? '<div class="row-meta">' + escapeHtml(r.notes) + '</div>' : '') +
+          actions +
+        '</div>' +
+      '</div>';
+  }
+
+  function markCollected(id) {
+    var r = requests.find(function (x) { return x.id === id; });
+    if (!r) return;
+    r.status = 'collected';
+    r.collectedAt = Date.now();
+    saveRequests(requests);
+    logHistory('collected', r);
+    render();
+  }
+
+  function removeRequest(id) {
+    var r = requests.find(function (x) { return x.id === id; });
+    requests = requests.filter(function (x) { return x.id !== id; });
+    saveRequests(requests);
+    if (r) logHistory('removed', r);
+    render();
+  }
+
+  function renderHistory() {
+    if (history.length === 0) {
+      historyList.innerHTML = '<p class="empty">Nothing logged yet. Every request, pickup and removal will show up here as it happens.</p>';
+      return;
+    }
+    historyList.innerHTML = history.map(function (h) {
+      return '' +
+        '<div class="history-row evt-' + h.event + '">' +
+          '<div class="history-dot"></div>' +
+          '<div>' +
+            '<div class="history-event">' + EVENT_LABEL[h.event] + '</div>' +
+            '<div class="history-company">' + escapeHtml(h.company) + '</div>' +
+            '<div class="history-sub">' + SECTOR_LABEL[h.sector] + ' · ' + escapeHtml(h.qty) + ' · ' + timeAgo(h.at) + '</div>' +
+          '</div>' +
+        '</div>';
+    }).join('');
+  }
+
+  function openHistory() {
+    renderHistory();
+    historyOverlay.classList.add('open');
+    historyFab.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeHistory() {
+    historyOverlay.classList.remove('open');
+    historyFab.setAttribute('aria-expanded', 'false');
+  }
+
+  historyFab.addEventListener('click', openHistory);
+  historyCloseBtn.addEventListener('click', closeHistory);
+  historyOverlay.addEventListener('click', function (e) {
+    if (e.target === historyOverlay) closeHistory();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && historyOverlay.classList.contains('open')) closeHistory();
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    var company = document.getElementById('company').value.trim();
+    var contact = document.getElementById('contact').value.trim();
+    var qty = document.getElementById('qty').value.trim();
+    var phone = document.getElementById('phone').value.trim();
+    var address = document.getElementById('address').value.trim();
+    var notes = document.getElementById('notes').value.trim();
+
+    var valid = true;
+    clearFieldError('f-company'); clearFieldError('f-contact'); clearFieldError('f-sector');
+    clearFieldError('f-qty'); clearFieldError('f-phone'); clearFieldError('f-address');
+
+    if (!company) { setFieldError('f-company', true); valid = false; }
+    if (!contact) { setFieldError('f-contact', true); valid = false; }
+    if (!selectedSector) { setFieldError('f-sector', true); valid = false; }
+    if (!qty) { setFieldError('f-qty', true); valid = false; }
+    if (!phone) { setFieldError('f-phone', true); valid = false; }
+    if (!address) { setFieldError('f-address', true); valid = false; }
+
+    if (!valid) return;
+
+    var newRequest = {
+      id: 'r' + Date.now() + Math.random().toString(36).slice(2, 7),
+      company: company,
+      contact: contact,
+      phone: phone,
+      sector: selectedSector,
+      qty: qty,
+      address: address,
+      notes: notes,
+      status: 'pending',
+      createdAt: Date.now(),
+      collectedAt: null
+    };
+    requests.push(newRequest);
+    saveRequests(requests);
+    logHistory('logged', newRequest);
+
+    form.reset();
+    selectedSector = null;
+    Array.prototype.forEach.call(sectorPicker.querySelectorAll('.sector-opt'), function (el) {
+      el.classList.remove('active');
+    });
+
+    render();
+    showThanks();
+  });
+
+  render();
+  showLogin();
+})();
+</script>
+</body>
+</html>
